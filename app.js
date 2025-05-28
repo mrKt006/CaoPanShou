@@ -94,18 +94,25 @@ function startExam() {
             console.log('已显示考试容器');
         }
         
-        currentQuestion = 0;
-        justSwitchedQuestion = true; // 标记刚刚切换了问题
-        
         // 确保问题容器可见
         if (questionContainer) {
             questionContainer.style.display = 'block';
             console.log('已确保问题容器可见');
         }
         
-        displayQuestion(currentQuestion);
-        updateProgressBar();
-        updateQuestionCounter();
+        // 使用新的导航逻辑，从题目ID为1的题目开始
+        const index = getQuestionIndexById(1);
+        if (index !== -1) {
+            currentQuestion = index;
+            justSwitchedQuestion = true;
+            console.log(`开始考试，显示ID为1的题目，索引为${index}`);
+            displayQuestion(currentQuestion);
+            updateProgressBar();
+            updateQuestionCounter();
+        } else {
+            console.error('无法找到ID为1的题目，考试无法开始');
+            alert('初始化考试失败，请刷新页面重试');
+        }
     } catch (error) {
         console.error('开始考试失败:', error);
         alert('开始考试时发生错误，请刷新页面重试');
@@ -309,39 +316,167 @@ function selectOption(questionIndex, optionId) {
     }
 }
 
-// 前往上一题
-function goToPreviousQuestion() {
-    console.log('前往上一题');
-    
+// 根据索引获取问题信息
+function getQuestionByIndex(index) {
     try {
-        if (currentQuestion > 0) {
-            console.log(`当前题目索引: ${currentQuestion}, 将要前往题目索引: ${currentQuestion - 1}`);
+        console.log(`尝试获取索引为 ${index} 的问题`);
+        let questionCounter = 0;
+        
+        if (typeof examData === 'undefined' || !examData.sections) {
+            console.error('examData未定义或结构不正确');
+            return null;
+        }
+        
+        // 打印所有题目的ID，检查是否有偶数ID的题目
+        let allQuestionIds = [];
+        examData.sections.forEach((section, sectionIndex) => {
+            if (section.questions && Array.isArray(section.questions)) {
+                console.log(`第${sectionIndex+1}部分 "${section.title}" 包含 ${section.questions.length} 道题目`);
+                section.questions.forEach((q, qIndex) => {
+                    allQuestionIds.push(q.id);
+                    console.log(`  题目 ${qIndex+1}: ID=${q.id}, 题目="${q.question.substring(0, 30)}..."`);
+                });
+            }
+        });
+        console.log('所有题目ID:', allQuestionIds.sort((a,b) => a - b).join(', '));
+        
+        // 检查是否有偶数ID缺失
+        let missingEvenIds = [];
+        for (let i = 2; i <= 40; i += 2) {
+            if (!allQuestionIds.includes(i)) {
+                missingEvenIds.push(i);
+            }
+        }
+        if (missingEvenIds.length > 0) {
+            console.error('缺少偶数ID题目:', missingEvenIds.join(', '));
+        }
+        
+        for (let i = 0; i < examData.sections.length; i++) {
+            const section = examData.sections[i];
             
-            // 保存当前题目的答案
-            const currentAnswer = userAnswers[currentQuestion];
-            console.log(`当前题目的答案: ${currentAnswer}`);
-            
-            currentQuestion--;
-            justSwitchedQuestion = true; // 标记刚刚切换了问题
-            
-            // 显示题目前确保数据正确
-            const questionInfo = getQuestionByIndex(currentQuestion);
-            if (questionInfo) {
-                console.log(`将要显示的题目ID: ${questionInfo.question.id}`);
-            } else {
-                console.error(`无法获取题目信息，索引: ${currentQuestion}`);
+            if (!section.questions || !Array.isArray(section.questions)) {
+                console.error(`第${i+1}部分的questions属性不存在或不是数组`);
+                continue;
             }
             
-            displayQuestion(currentQuestion);
-            updateProgressBar();
-            updateQuestionCounter();
+            for (let j = 0; j < section.questions.length; j++) {
+                const question = section.questions[j];
+                
+                // 记录每个题目的索引和ID，用于调试
+                console.log(`题目索引: ${questionCounter}, 题目ID: ${question.id}`);
+                
+                if (questionCounter === index) {
+                    console.log(`找到问题: ID=${question.id}, 题目="${question.question.substring(0, 20)}..."`);
+                    return {
+                        section: section,
+                        question: question,
+                        sectionIndex: i,
+                        questionIndex: j
+                    };
+                }
+                questionCounter++;
+            }
         }
+        
+        console.error(`未找到索引为 ${index} 的问题，总问题数量: ${questionCounter}`);
+        return null;
     } catch (error) {
-        console.error('前往上一题失败:', error);
+        console.error('获取问题信息失败:', error);
+        return null;
     }
 }
 
-// 前往下一题
+// 根据题目ID获取题目信息
+function getQuestionById(id) {
+    try {
+        console.log(`尝试获取ID为 ${id} 的问题`);
+        
+        if (typeof examData === 'undefined' || !examData.sections) {
+            console.error('examData未定义或结构不正确');
+            return null;
+        }
+        
+        for (let i = 0; i < examData.sections.length; i++) {
+            const section = examData.sections[i];
+            
+            if (!section.questions || !Array.isArray(section.questions)) {
+                continue;
+            }
+            
+            for (let j = 0; j < section.questions.length; j++) {
+                const question = section.questions[j];
+                
+                if (question.id === id) {
+                    console.log(`找到ID为${id}的问题: "${question.question.substring(0, 20)}..."`);
+                    return {
+                        section: section,
+                        question: question,
+                        sectionIndex: i,
+                        questionIndex: j
+                    };
+                }
+            }
+        }
+        
+        console.error(`未找到ID为 ${id} 的问题`);
+        return null;
+    } catch (error) {
+        console.error('通过ID获取问题信息失败:', error);
+        return null;
+    }
+}
+
+// 获取题目在整体中的索引
+function getQuestionIndexById(id) {
+    try {
+        let questionCounter = 0;
+        
+        for (let i = 0; i < examData.sections.length; i++) {
+            const section = examData.sections[i];
+            
+            if (!section.questions || !Array.isArray(section.questions)) {
+                continue;
+            }
+            
+            for (let j = 0; j < section.questions.length; j++) {
+                const question = section.questions[j];
+                
+                if (question.id === id) {
+                    return questionCounter;
+                }
+                
+                questionCounter++;
+            }
+        }
+        
+        return -1; // 未找到
+    } catch (error) {
+        console.error('获取题目索引失败:', error);
+        return -1;
+    }
+}
+
+// 获取当前题目的ID
+function getCurrentQuestionId() {
+    const questionInfo = getQuestionByIndex(currentQuestion);
+    return questionInfo ? questionInfo.question.id : null;
+}
+
+// 前往指定ID的题目
+function goToQuestionById(id) {
+    const index = getQuestionIndexById(id);
+    if (index !== -1) {
+        currentQuestion = index;
+        justSwitchedQuestion = true;
+        displayQuestion(currentQuestion);
+        updateProgressBar();
+        updateQuestionCounter();
+        return true;
+    }
+    return false;
+}
+
+// 前往下一题（按ID顺序）
 function goToNextQuestion() {
     console.log('尝试前往下一题');
     
@@ -352,30 +487,76 @@ function goToNextQuestion() {
             return;
         }
         
-        if (currentQuestion < userAnswers.length - 1) {
-            console.log(`当前题目索引: ${currentQuestion}, 将要前往题目索引: ${currentQuestion + 1}`);
-            
-            // 保存当前题目的答案
-            const currentAnswer = userAnswers[currentQuestion];
-            console.log(`当前题目的答案: ${currentAnswer}`);
-            
-            currentQuestion++;
-            justSwitchedQuestion = true; // 标记刚刚切换了问题
-            
-            // 显示题目前确保数据正确
-            const questionInfo = getQuestionByIndex(currentQuestion);
-            if (questionInfo) {
-                console.log(`将要显示的题目ID: ${questionInfo.question.id}`);
+        // 获取当前题目ID
+        const currentId = getCurrentQuestionId();
+        if (currentId === null) {
+            console.error('无法获取当前题目ID');
+            return;
+        }
+        
+        console.log(`当前题目ID: ${currentId}`);
+        
+        // 前往下一个ID的题目
+        const nextId = currentId + 1;
+        if (nextId <= 40) { // 假设最大题目ID为40
+            console.log(`尝试前往ID为${nextId}的题目`);
+            if (goToQuestionById(nextId)) {
+                console.log(`成功前往ID为${nextId}的题目`);
             } else {
-                console.error(`无法获取题目信息，索引: ${currentQuestion}`);
+                console.error(`未找到ID为${nextId}的题目，尝试寻找下一个有效ID`);
+                
+                // 如果找不到下一个ID，尝试寻找再下一个ID
+                for (let id = nextId + 1; id <= 40; id++) {
+                    if (goToQuestionById(id)) {
+                        console.log(`成功前往ID为${id}的题目`);
+                        break;
+                    }
+                }
             }
-            
-            displayQuestion(currentQuestion);
-            updateProgressBar();
-            updateQuestionCounter();
+        } else {
+            console.log('已经是最后一题');
         }
     } catch (error) {
         console.error('前往下一题失败:', error);
+    }
+}
+
+// 前往上一题（按ID顺序）
+function goToPreviousQuestion() {
+    console.log('前往上一题');
+    
+    try {
+        // 获取当前题目ID
+        const currentId = getCurrentQuestionId();
+        if (currentId === null) {
+            console.error('无法获取当前题目ID');
+            return;
+        }
+        
+        console.log(`当前题目ID: ${currentId}`);
+        
+        // 前往上一个ID的题目
+        const prevId = currentId - 1;
+        if (prevId >= 1) { // 题目ID从1开始
+            console.log(`尝试前往ID为${prevId}的题目`);
+            if (goToQuestionById(prevId)) {
+                console.log(`成功前往ID为${prevId}的题目`);
+            } else {
+                console.error(`未找到ID为${prevId}的题目，尝试寻找上一个有效ID`);
+                
+                // 如果找不到上一个ID，尝试寻找再上一个ID
+                for (let id = prevId - 1; id >= 1; id--) {
+                    if (goToQuestionById(id)) {
+                        console.log(`成功前往ID为${id}的题目`);
+                        break;
+                    }
+                }
+            }
+        } else {
+            console.log('已经是第一题');
+        }
+    } catch (error) {
+        console.error('前往上一题失败:', error);
     }
 }
 
@@ -556,47 +737,5 @@ function updateButtonState() {
         }
     } catch (error) {
         console.error('更新按钮状态失败:', error);
-    }
-}
-
-// 根据索引获取问题信息
-function getQuestionByIndex(index) {
-    try {
-        console.log(`尝试获取索引为 ${index} 的问题`);
-        let questionCounter = 0;
-        
-        if (typeof examData === 'undefined' || !examData.sections) {
-            console.error('examData未定义或结构不正确');
-            return null;
-        }
-        
-        for (let i = 0; i < examData.sections.length; i++) {
-            const section = examData.sections[i];
-            
-            if (!section.questions || !Array.isArray(section.questions)) {
-                console.error(`第${i+1}部分的questions属性不存在或不是数组`);
-                continue;
-            }
-            
-            for (let j = 0; j < section.questions.length; j++) {
-                if (questionCounter === index) {
-                    const question = section.questions[j];
-                    console.log(`找到问题: ID=${question.id}, 题目="${question.question.substring(0, 20)}..."`);
-                    return {
-                        section: section,
-                        question: question,
-                        sectionIndex: i,
-                        questionIndex: j
-                    };
-                }
-                questionCounter++;
-            }
-        }
-        
-        console.error(`未找到索引为 ${index} 的问题，总问题数量: ${questionCounter}`);
-        return null;
-    } catch (error) {
-        console.error('获取问题信息失败:', error);
-        return null;
     }
 } 
