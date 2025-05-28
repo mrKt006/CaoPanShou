@@ -2,9 +2,14 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>操盘手能力评估考试</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- 防止缓存问题 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 </head>
 <body>
     <div class="container">
@@ -25,7 +30,7 @@
                     <li>团队管理与项目运营（6题，15分）</li>
                 </ul>
                 <div class="start-btn-container">
-                    <button id="start-exam" class="btn">开始考试</button>
+                    <button id="start-exam" class="btn" onclick="startExam()">开始考试</button>
                 </div>
             </div>
 
@@ -36,11 +41,11 @@
                 </div>
                 <div id="question-container"></div>
                 <div class="exam-controls">
-                    <button id="prev-btn" class="btn">上一题</button>
+                    <button id="prev-btn" class="btn" onclick="goToPreviousQuestion()">上一题</button>
                     <span id="question-counter">1/40</span>
-                    <button id="next-btn" class="btn">下一题</button>
+                    <button id="next-btn" class="btn" onclick="goToNextQuestion()">下一题</button>
                 </div>
-                <button id="submit-exam" class="btn submit-btn hidden">提交答案</button>
+                <button id="submit-exam" class="btn submit-btn hidden" onclick="submitExam()">提交答案</button>
             </div>
 
             <div id="result-container" class="result-section hidden">
@@ -55,5 +60,27 @@
 
     <script src="questions.js"></script>
     <script src="app.js"></script>
+    <script>
+        // 直接在HTML中添加备用的事件处理，以防addEventListener失效
+        document.getElementById('start-exam').onclick = function() {
+            startExam();
+        };
+        document.getElementById('prev-btn').onclick = function() {
+            goToPreviousQuestion();
+        };
+        document.getElementById('next-btn').onclick = function() {
+            goToNextQuestion();
+        };
+        document.getElementById('submit-exam').onclick = function() {
+            submitExam();
+        };
+        
+        // 确保DOM加载完成后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeUserAnswers);
+        } else {
+            initializeUserAnswers();
+        }
+    </script>
 </body>
 </html> 

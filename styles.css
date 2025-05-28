@@ -4,12 +4,16 @@
     padding: 0;
     box-sizing: border-box;
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    -webkit-tap-highlight-color: transparent;
 }
 
-body {
+html, body {
+    height: 100%;
+    width: 100%;
     background-color: #f5f7fa;
     color: #333;
     line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
 }
 
 .container {
@@ -80,10 +84,30 @@ header h1 {
     font-size: 16px;
     transition: background-color 0.3s;
     white-space: nowrap;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    touch-action: manipulation;
 }
 
 .btn:hover {
     background-color: #2980b9;
+}
+
+.btn:active {
+    background-color: #2473a6;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.btn:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
 }
 
 .start-btn-container {
@@ -145,10 +169,18 @@ header h1 {
     transition: all 0.2s;
     overflow-wrap: break-word;
     word-wrap: break-word;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .option:hover {
     background-color: #f5f7fa;
+}
+
+.option:active {
+    background-color: #e8f4fc;
 }
 
 .option.selected {
@@ -236,7 +268,7 @@ header h1 {
 
 /* 工具类 */
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 /* 页脚样式 */
@@ -262,12 +294,13 @@ footer {
     }
     
     .exam-controls {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
     }
     
     .btn {
-        width: 100%;
+        min-width: 80px;
     }
     
     .question-title {
@@ -275,7 +308,7 @@ footer {
     }
     
     .option {
-        padding: 10px 12px;
+        padding: 12px 15px;
         font-size: 15px;
     }
 }
@@ -288,6 +321,7 @@ footer {
     
     .main-content {
         padding: 15px 10px;
+        border-radius: 6px;
     }
     
     header h1 {
@@ -307,8 +341,9 @@ footer {
     }
     
     .option {
-        padding: 8px 10px;
+        padding: 10px 12px;
         font-size: 14px;
+        margin-bottom: 8px;
     }
     
     .message-area {
@@ -326,5 +361,15 @@ footer {
     .btn {
         font-size: 14px;
         padding: 8px 16px;
+        min-width: 70px;
+    }
+    
+    .exam-controls {
+        margin-top: 20px;
+    }
+    
+    #question-counter {
+        min-width: 60px;
+        text-align: center;
     }
 } 
