@@ -83,10 +83,26 @@ function startExam() {
     
     try {
         examStarted = true;
-        if (introSection) introSection.classList.add('hidden');
-        if (examContainer) examContainer.classList.remove('hidden');
+        if (introSection) {
+            introSection.classList.add('hidden');
+            console.log('已隐藏介绍部分');
+        }
+        
+        if (examContainer) {
+            examContainer.classList.remove('hidden');
+            examContainer.style.display = 'block'; // 确保显示
+            console.log('已显示考试容器');
+        }
+        
         currentQuestion = 0;
         justSwitchedQuestion = true; // 标记刚刚切换了问题
+        
+        // 确保问题容器可见
+        if (questionContainer) {
+            questionContainer.style.display = 'block';
+            console.log('已确保问题容器可见');
+        }
+        
         displayQuestion(currentQuestion);
         updateProgressBar();
         updateQuestionCounter();
@@ -96,9 +112,45 @@ function startExam() {
     }
 }
 
+// 确保问题元素可见
+function ensureQuestionVisible() {
+    try {
+        // 检查问题容器是否存在
+        if (!questionContainer) {
+            console.error('问题容器不存在');
+            return;
+        }
+        
+        // 检查问题元素是否存在
+        const questionElement = questionContainer.querySelector('.question');
+        if (!questionElement) {
+            console.error('问题元素不存在');
+            return;
+        }
+        
+        // 检查选项列表是否存在
+        const optionsList = questionElement.querySelector('.options');
+        if (!optionsList) {
+            console.error('选项列表不存在');
+            return;
+        }
+        
+        // 检查选项数量
+        const options = optionsList.querySelectorAll('.option');
+        console.log(`当前问题有 ${options.length} 个选项`);
+        
+        // 确保问题容器可见
+        questionContainer.style.display = 'block';
+        
+        console.log('问题元素检查完成，显示正常');
+    } catch (error) {
+        console.error('确保问题可见失败:', error);
+    }
+}
+
 // 显示当前问题
 function displayQuestion(index) {
-    console.log(`显示第${index + 1}题`);
+    console.log(`显示第${index + 1}题，对应索引: ${index}`);
     
     try {
         // 获取当前问题信息
@@ -110,6 +162,14 @@ function displayQuestion(index) {
         
         const question = questionInfo.question;
         
+        // 调试信息：输出当前问题的详细信息
+        console.log('当前问题信息:', {
+            questionId: question.id,
+            questionText: question.question,
+            options: question.options.map(opt => opt.id),
+            currentQuestionIndex: index
+        });
+        
         // 清空问题容器
         if (questionContainer) questionContainer.innerHTML = '';
         else {
@@ -120,6 +180,8 @@ function displayQuestion(index) {
         // 创建问题元素
         const questionElement = document.createElement('div');
         questionElement.classList.add('question');
+        questionElement.dataset.questionIndex = index; // 添加索引属性
+        questionElement.dataset.questionId = question.id; // 添加ID属性
         
         // 添加问题标题
         const questionTitle = document.createElement('div');
@@ -131,10 +193,17 @@ function displayQuestion(index) {
         const optionsList = document.createElement('ul');
         optionsList.classList.add('options');
         
+        // 确保选项数组存在
+        if (!question.options || !Array.isArray(question.options)) {
+            console.error(`问题ID=${question.id}的选项不存在或不是数组`);
+            return;
+        }
+        
         question.options.forEach(option => {
             const optionItem = document.createElement('li');
             optionItem.classList.add('option');
             optionItem.dataset.optionId = option.id;
+            optionItem.dataset.questionIndex = index; // 添加问题索引属性
             optionItem.textContent = `${option.id}. ${option.text}`;
             
             // 如果该选项已被选中，添加selected类
@@ -145,7 +214,8 @@ function displayQuestion(index) {
             // 添加选项点击事件
             optionItem.addEventListener('click', function(e) {
                 e.preventDefault();
-                selectOption(index, option.id);
+                const questionIndex = parseInt(this.dataset.questionIndex);
+                selectOption(questionIndex, option.id);
             });
             
             optionsList.appendChild(optionItem);
@@ -163,6 +233,9 @@ function displayQuestion(index) {
         
         // 更新按钮状态
         updateButtonState();
+        
+        // 确保问题元素可见
+        ensureQuestionVisible();
         
         // 设置一个短暂的延时，标记问题已经完全切换
         setTimeout(() => {
@@ -204,16 +277,30 @@ function selectOption(questionIndex, optionId) {
     console.log(`选择了第${questionIndex + 1}题的选项${optionId}`);
     
     try {
+        // 保存答案到用户答案数组
         userAnswers[questionIndex] = optionId;
+        console.log(`已保存答案: 问题索引=${questionIndex}, 选项=${optionId}`);
+        console.log(`当前用户答案数组:`, userAnswers.map((ans, idx) => `问题${idx+1}: ${ans || '未答'}`).join(', '));
         
         // 更新选项样式
         const options = document.querySelectorAll('.option');
+        if (options.length === 0) {
+            console.error('未找到任何选项元素');
+        }
+        
+        let selectedFound = false;
         options.forEach(option => {
             option.classList.remove('selected');
             if (option.dataset.optionId === optionId) {
                 option.classList.add('selected');
+                selectedFound = true;
+                console.log(`已将选项 ${optionId} 标记为已选中`);
             }
         });
+        
+        if (!selectedFound) {
+            console.warn(`未找到匹配的选项元素: ${optionId}`);
+        }
         
         // 更新提交按钮状态
         updateButtonState();
@@ -228,8 +315,23 @@ function goToPreviousQuestion() {
     
     try {
         if (currentQuestion > 0) {
+            console.log(`当前题目索引: ${currentQuestion}, 将要前往题目索引: ${currentQuestion - 1}`);
+            
+            // 保存当前题目的答案
+            const currentAnswer = userAnswers[currentQuestion];
+            console.log(`当前题目的答案: ${currentAnswer}`);
+            
             currentQuestion--;
             justSwitchedQuestion = true; // 标记刚刚切换了问题
+            
+            // 显示题目前确保数据正确
+            const questionInfo = getQuestionByIndex(currentQuestion);
+            if (questionInfo) {
+                console.log(`将要显示的题目ID: ${questionInfo.question.id}`);
+            } else {
+                console.error(`无法获取题目信息，索引: ${currentQuestion}`);
+            }
+            
             displayQuestion(currentQuestion);
             updateProgressBar();
             updateQuestionCounter();
@@ -251,8 +353,23 @@ function goToNextQuestion() {
         }
         
         if (currentQuestion < userAnswers.length - 1) {
+            console.log(`当前题目索引: ${currentQuestion}, 将要前往题目索引: ${currentQuestion + 1}`);
+            
+            // 保存当前题目的答案
+            const currentAnswer = userAnswers[currentQuestion];
+            console.log(`当前题目的答案: ${currentAnswer}`);
+            
             currentQuestion++;
             justSwitchedQuestion = true; // 标记刚刚切换了问题
+            
+            // 显示题目前确保数据正确
+            const questionInfo = getQuestionByIndex(currentQuestion);
+            if (questionInfo) {
+                console.log(`将要显示的题目ID: ${questionInfo.question.id}`);
+            } else {
+                console.error(`无法获取题目信息，索引: ${currentQuestion}`);
+            }
+            
             displayQuestion(currentQuestion);
             updateProgressBar();
             updateQuestionCounter();
@@ -445,16 +562,29 @@ function updateButtonState() {
 // 根据索引获取问题信息
 function getQuestionByIndex(index) {
     try {
+        console.log(`尝试获取索引为 ${index} 的问题`);
         let questionCounter = 0;
+        
+        if (typeof examData === 'undefined' || !examData.sections) {
+            console.error('examData未定义或结构不正确');
+            return null;
+        }
         
         for (let i = 0; i < examData.sections.length; i++) {
             const section = examData.sections[i];
             
+            if (!section.questions || !Array.isArray(section.questions)) {
+                console.error(`第${i+1}部分的questions属性不存在或不是数组`);
+                continue;
+            }
+            
             for (let j = 0; j < section.questions.length; j++) {
                 if (questionCounter === index) {
+                    const question = section.questions[j];
+                    console.log(`找到问题: ID=${question.id}, 题目="${question.question.substring(0, 20)}..."`);
                     return {
                         section: section,
-                        question: section.questions[j],
+                        question: question,
                         sectionIndex: i,
                         questionIndex: j
                     };
@@ -463,6 +593,7 @@ function getQuestionByIndex(index) {
             }
         }
         
+        console.error(`未找到索引为 ${index} 的问题，总问题数量: ${questionCounter}`);
         return null;
     } catch (error) {
         console.error('获取问题信息失败:', error);
