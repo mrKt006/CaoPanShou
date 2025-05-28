@@ -5,6 +5,8 @@
     box-sizing: border-box;
     font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
     -webkit-tap-highlight-color: transparent;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 html, body {
@@ -17,10 +19,13 @@ html, body {
 }
 
 .container {
+    width: 100%;
     max-width: 900px;
     margin: 0 auto;
     padding: 20px;
-    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* 头部样式 */
@@ -29,6 +34,7 @@ header {
     margin-bottom: 30px;
     padding: 20px 0;
     border-bottom: 2px solid #e0e6ed;
+    position: relative;
 }
 
 header h1 {
@@ -53,6 +59,16 @@ header h1 {
     word-wrap: break-word;
 }
 
+#start-page {
+    text-align: center;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    flex: 1;
+}
+
 /* 介绍部分 */
 .intro-section {
     margin-bottom: 20px;
@@ -62,6 +78,7 @@ header h1 {
     color: #2c3e50;
     margin-bottom: 15px;
     font-size: 24px;
+    text-align: center; /* Explicitly center intro-section h2 as well if needed */
 }
 
 .intro-section ul {
@@ -73,7 +90,7 @@ header h1 {
     margin-bottom: 8px;
 }
 
-/* 按钮样式 */
+/* 按钮通用样式 */
 .btn {
     background-color: #3498db;
     color: white;
@@ -91,6 +108,7 @@ header h1 {
     text-align: center;
     text-decoration: none;
     touch-action: manipulation;
+    min-height: 44px;
 }
 
 .btn:hover {
@@ -126,7 +144,13 @@ header h1 {
 
 /* 考试部分 */
 .exam-section {
-    margin-top: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    padding-top: 40px; /* 增加顶部内边距，为关闭按钮留出空间 */
+    margin-bottom: 30px;
+    position: relative;
 }
 
 #progress-bar-container {
@@ -141,7 +165,7 @@ header h1 {
     height: 100%;
     background-color: #3498db;
     border-radius: 4px;
-    width: 2.5%;
+    width: 0%; /* Start with 0% and let JS update */
     transition: width 0.3s ease;
 }
 
@@ -149,7 +173,7 @@ header h1 {
     margin-bottom: 30px;
 }
 
-.question-title {
+.question p {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 15px;
@@ -157,7 +181,7 @@ header h1 {
 }
 
 .options {
-    list-style-type: none;
+    list-style-type: none; /* Ensure no bullets for ul if used for options */
 }
 
 .option {
@@ -173,6 +197,22 @@ header h1 {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    display: flex; /* For aligning radio button and label */
+    align-items: center; /* For aligning radio button and label */
+}
+
+.option input[type="radio"] {
+    margin-right: 10px;
+    cursor: pointer;
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+.option label {
+    cursor: pointer;
+    flex-grow: 1; /* Label takes remaining space */
+    font-size: 16px;
+    line-height: 1.5;
 }
 
 .option:hover {
@@ -183,6 +223,7 @@ header h1 {
     background-color: #e8f4fc;
 }
 
+/* Visual feedback for selected radio button's parent .option div */
 .option.selected {
     background-color: #e1f0fa;
     border-color: #3498db;
@@ -200,15 +241,15 @@ header h1 {
 }
 
 .message-area.error {
-    background-color: #fce4e4;
-    color: #e74c3c;
-    border: 1px solid #f5b7b1;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
 }
 
 .message-area.success {
-    background-color: #e9f7ef;
-    color: #27ae60;
-    border: 1px solid #a9dfbf;
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
 }
 
 /* 考试控制区 */
@@ -216,160 +257,453 @@ header h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 30px;
+    margin-top: 20px;
 }
 
 #question-counter {
-    font-size: 16px;
-    color: #7f8c8d;
+    font-size: 1em;
+    color: #555;
 }
 
 /* 结果部分 */
-.result-section {
-    text-align: center;
-    padding: 20px;
-}
-
-.score {
-    font-size: 36px;
-    font-weight: bold;
+#result-page h2 {
     color: #2c3e50;
-    margin: 20px 0;
-}
-
-.evaluation {
+    margin-bottom: 20px;
     font-size: 24px;
-    color: #27ae60;
+    text-align: center;
+}
+
+#result-summary {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+#result-summary h2 {
+    font-size: 28px;
+    color: #333;
     margin-bottom: 20px;
 }
 
-.evaluation-description {
-    line-height: 1.5;
-    margin-bottom: 20px;
-}
-
-.result-details {
-    margin-top: 30px;
-    text-align: left;
-}
-
-.section-result {
+#result-summary h3 {
+    font-size: 24px;
+    color: #2ecc71;
     margin-bottom: 15px;
 }
 
-.section-title {
+#result-summary p {
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 30px;
+}
+
+#result-summary ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+#result-summary li {
+    margin-bottom: 15px;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#result-summary li div:first-child {
     font-weight: bold;
+    color: #333;
     margin-bottom: 5px;
 }
 
-.retry-btn {
-    margin-top: 30px;
+#result-summary li div:last-child {
+    color: #666;
 }
 
-/* 工具类 */
+#assessment-chart {
+    max-width: 450px;
+    max-height: 450px;
+    margin: 0 auto 20px auto; /* Centered with bottom margin */
+    display: block; /* Ensure it behaves as a block for centering */
+}
+
+/* Styles for career assessment results */
+#career-assessment-results h3 {
+    color: #2c3e50;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+#career-assessment-results ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    margin-bottom: 15px;
+}
+
+#career-assessment-results ul li {
+    margin-bottom: 8px;
+}
+
+#career-assessment-results p strong { /* For the 'Note:' text */
+    font-weight: bold;
+}
+
+#career-total-score-evaluation h4 {
+    font-size: 1.2em;
+    color: #3498db;
+    margin-bottom: 10px;
+}
+
+#career-total-score-evaluation ul {
+    list-style-type: circle;
+    margin-bottom: 10px;
+}
+
 .hidden {
-    display: none !important;
+    display: none !important; /* Use important to override other display styles if necessary */
 }
 
 /* 页脚样式 */
 footer {
     text-align: center;
-    padding: 20px 0;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e0e6ed;
     color: #7f8c8d;
-    font-size: 14px;
+    font-size: 0.9em;
 }
 
-/* 响应式设计 */
+/* 媒体查询 - 响应式设计 */
 @media (max-width: 768px) {
+    html {
+        font-size: 14px;
+    }
+
     .container {
         padding: 15px;
     }
-    
-    .main-content {
-        padding: 20px 15px;
-    }
-    
+
     header h1 {
-        font-size: 26px;
+        font-size: 24px;
     }
-    
-    .exam-controls {
-        flex-direction: row;
-        gap: 10px;
-        flex-wrap: wrap;
+
+    #result-summary h2 {
+        font-size: 22px;
     }
-    
-    .btn {
-        min-width: 80px;
+
+    #result-summary h3 {
+        font-size: 20px;
     }
-    
-    .question-title {
+
+    .question p {
         font-size: 16px;
     }
-    
+
     .option {
-        padding: 12px 15px;
-        font-size: 15px;
+        padding: 12px;
+    }
+
+    /* 调整按钮大小和间距 */
+    .btn {
+        padding: 8px 16px;
+        font-size: 14px;
+        margin: 5px;
+        width: auto;
+        min-width: 100px;
+    }
+
+    /* 确保评估结果正确显示 */
+    #result-summary {
+        padding: 15px;
+    }
+
+    #result-summary ul {
+        padding: 0 10px;
+    }
+
+    #result-summary li {
+        margin-bottom: 10px;
+    }
+
+    .exam-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .exam-controls button {
+        width: 100%;
+        max-width: 200px;
+        margin: 5px 0;
+    }
+
+    #question-counter {
+        margin: 10px 0;
+    }
+
+    /* 优化选项显示 */
+    .option label {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    /* 确保评估结果在小屏幕上清晰可读 */
+    #result-summary {
+        padding: 10px;
+    }
+
+    #result-summary ul {
+        padding: 0 5px;
+    }
+
+    #result-summary li {
+        margin-bottom: 8px;
     }
 }
 
-/* 小屏幕手机适配 */
 @media (max-width: 480px) {
+    html {
+        font-size: 12px;
+    }
+
     .container {
         padding: 10px;
     }
-    
-    .main-content {
-        padding: 15px 10px;
-        border-radius: 6px;
-    }
-    
+
     header h1 {
-        font-size: 22px;
-    }
-    
-    .description {
-        font-size: 14px;
-    }
-    
-    .intro-section h2 {
         font-size: 20px;
     }
-    
-    .question-title {
-        font-size: 15px;
+
+    #result-summary h2 {
+        font-size: 18px;
     }
-    
-    .option {
-        padding: 10px 12px;
+
+    #result-summary h3 {
+        font-size: 16px;
+    }
+
+    .question p {
         font-size: 14px;
+    }
+
+    .option {
+        padding: 10px;
+    }
+
+    /* 调整按钮布局 */
+    .exam-controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .exam-controls button {
+        width: 100%;
+        max-width: 200px;
+        margin: 5px 0;
+    }
+
+    #question-counter {
+        margin: 10px 0;
+    }
+
+    /* 优化选项显示 */
+    .option label {
+        font-size: 14px;
+        line-height: 1.4;
+    }
+
+    /* 确保评估结果在小屏幕上清晰可读 */
+    #result-summary {
+        padding: 10px;
+    }
+
+    #result-summary ul {
+        padding: 0 5px;
+    }
+
+    #result-summary li {
         margin-bottom: 8px;
     }
-    
-    .message-area {
-        font-size: 14px;
+}
+
+/* 确保在超小屏幕上也能正常显示 */
+@media (max-width: 320px) {
+    html {
+        font-size: 11px;
     }
-    
-    .score {
-        font-size: 28px;
+
+    .container {
+        padding: 8px;
     }
-    
-    .evaluation {
-        font-size: 20px;
+
+    header h1 {
+        font-size: 18px;
     }
-    
+
     .btn {
-        font-size: 14px;
-        padding: 8px 16px;
-        min-width: 70px;
+        padding: 6px 12px;
+        font-size: 12px;
     }
-    
-    .exam-controls {
-        margin-top: 20px;
+}
+
+/* 平板设备的优化 */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container {
+        padding: 25px;
     }
-    
-    #question-counter {
-        min-width: 60px;
-        text-align: center;
+
+    #result-summary {
+        padding: 20px;
     }
+}
+
+/* 确保图表响应式 */
+#assessment-chart {
+    max-width: 100%;
+    height: auto !important;
+}
+
+/* 确保选项按钮在各种屏幕尺寸下都能正确对齐 */
+.option {
+    display: flex;
+    align-items: flex-start;
+}
+
+.option input[type="radio"] {
+    margin-top: 3px;
+    flex-shrink: 0;
+}
+
+/* 优化长文本显示 */
+.question p, 
+.option label,
+#result-summary p,
+#result-summary li {
+    line-height: 1.5;
+}
+
+/* 优化表单元素在移动设备上的显示 */
+input[type="radio"] {
+    min-width: 20px;
+    min-height: 20px;
+}
+
+/* 新增：测试选择分段控件样式 */
+.test-selection-group {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 1;
+}
+
+.test-select-btn {
+    padding: 8px 18px;
+    font-size: 0.95em;
+    color: #666;
+    background-color: #fff;
+    border: 1px solid #e0e6ed;
+    border-bottom: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    outline: none;
+    border-radius: 6px 6px 0 0;
+    position: relative;
+}
+
+.test-select-btn:not(:last-child) {
+    margin-right: -1px;
+}
+
+.test-select-btn.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+    border-bottom: 2px solid #007bff;
+    position: relative;
+    margin-bottom: -1px;
+    font-weight: 500;
+    box-shadow: 0 -2px 5px rgba(0,0,0,0.1);
+}
+
+.test-select-btn:hover:not(.active) {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+/* 确保结果页面的新section样式 */
+#career-assessment-results ul li strong {
+    font-weight: bold; /* Ensure this is applied if needed for emphasis in list items */
+}
+
+#career-assessment-results ul li span.shortfall {
+    color: red;
+    font-weight: bold;
+}
+
+#quiz-page {
+    flex: 1;
+}
+
+.close-btn {
+    position: absolute;
+    top: 5px; /* 调整到更靠近顶部的位置 */
+    right: 10px;
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: none;
+    font-size: 24px;
+    color: #666;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    padding: 0;
+    line-height: 1;
+    z-index: 2; /* 确保按钮始终在最上层 */
+}
+
+.close-btn:hover {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.close-btn:active {
+    background-color: #e0e0e0;
+    transform: scale(0.95);
+}
+
+.next-submit-container {
+    position: relative;
+    display: inline-block;
+}
+
+.next-submit-container button {
+    position: absolute;
+    right: 0;
+}
+
+.next-submit-container #next-btn,
+.next-submit-container #submit-exam {
+    position: relative;
+    margin: 0;
+}
+
+#result-page {
+    text-align: center;
+}
+
+#restart-exam {
+    margin: 30px auto;
+    display: block;
+}
+
+/* 基础响应式设计 */
+html {
+    font-size: 16px;
 } 

@@ -12,6 +12,7 @@ const examData = {
             questions: [
                 {
                     id: 1,
+                    section: "平台认知与规则理解",
                     question: "同一内容在不同平台表现差异巨大，最可能的原因是：",
                     options: [
                         { id: "A", text: "发布时间存在差异" },
@@ -23,6 +24,7 @@ const examData = {
                 },
                 {
                     id: 2,
+                    section: "平台认知与规则理解",
                     question: "以下哪种情况违规风险最高：",
                     options: [
                         { id: "A", text: "美妆博主推荐医用级别产品" },
@@ -34,6 +36,7 @@ const examData = {
                 },
                 {
                     id: 3,
+                    section: "平台认知与规则理解",
                     question: "抖音爆火内容适配到小红书，最需要调整的是：",
                     options: [
                         { id: "A", text: "视频时长和封面设计优化" },
@@ -45,6 +48,7 @@ const examData = {
                 },
                 {
                     id: 4,
+                    section: "平台认知与规则理解",
                     question: "主攻平台算法突然调整，内容曝光大幅下降，你会：",
                     options: [
                         { id: "A", text: "耐心等待算法逐渐稳定" },
@@ -56,6 +60,7 @@ const examData = {
                 },
                 {
                     id: 5,
+                    section: "平台认知与规则理解",
                     question: "以下哪个时间段发布效果通常最差：",
                     options: [
                         { id: "A", text: "工作日早上7-9点通勤时间" },
@@ -67,6 +72,7 @@ const examData = {
                 },
                 {
                     id: 6,
+                    section: "平台认知与规则理解",
                     question: "新账号发布内容后，平台通常会：",
                     options: [
                         { id: "A", text: "直接推送给全部目标用户" },
@@ -78,6 +84,7 @@ const examData = {
                 },
                 {
                     id: 7,
+                    section: "平台认知与规则理解",
                     question: "账号因违规被限流一周，最直接的影响是：",
                     options: [
                         { id: "A", text: "粉丝数量会大幅下降流失" },
@@ -89,6 +96,7 @@ const examData = {
                 },
                 {
                     id: 8,
+                    section: "平台认知与规则理解",
                     question: "平台突然禁止某类内容，你的应对策略是：",
                     options: [
                         { id: "A", text: "继续发布但降低频次" },
@@ -106,6 +114,7 @@ const examData = {
             questions: [
                 {
                     id: 9,
+                    section: "内容创作与制作",
                     question: "知识付费课程推广内容，最有效的框架是：",
                     options: [
                         { id: "A", text: "痛点展示→解决方案→课程介绍" },
@@ -117,6 +126,7 @@ const examData = {
                 },
                 {
                     id: 10,
+                    section: "内容创作与制作",
                     question: "普通生活vlog获得百万播放，最可能的原因是：",
                     options: [
                         { id: "A", text: "拍摄技巧非常专业高超" },
@@ -128,6 +138,7 @@ const examData = {
                 },
                 {
                     id: 11,
+                    section: "内容创作与制作",
                     question: "情感共鸣类内容的节奏控制核心是：",
                     options: [
                         { id: "A", text: "快节奏持续保持注意力" },
@@ -139,6 +150,7 @@ const examData = {
                 },
                 {
                     id: 12,
+                    section: "内容创作与制作",
                     question: "画面总是略微抖动，稳定器已校准，最可能原因：",
                     options: [
                         { id: "A", text: "稳定器电量严重不足影响" },
@@ -150,6 +162,7 @@ const examData = {
                 },
                 {
                     id: 13,
+                    section: "内容创作与制作",
                     question: "同一IP四种内容类型数据差异很大，你会：",
                     options: [
                         { id: "A", text: "专注表现最好的单一类型" },
@@ -161,6 +174,7 @@ const examData = {
                 },
                 {
                     id: 14,
+                    section: "内容创作与制作",
                     question: "爆款视频后续模仿制作效果平平，最可能原因：",
                     options: [
                         { id: "A", text: "平台算法发生显著变化" },
@@ -172,6 +186,7 @@ const examData = {
                 },
                 {
                     id: 15,
+                    section: "内容创作与制作",
                     question: "连续高强度产出后质量下降，最应该优化的是：",
                     options: [
                         { id: "A", text: "增加更多专业拍摄设备" },
@@ -183,6 +198,7 @@ const examData = {
                 },
                 {
                     id: 16,
+                    section: "内容创作与制作",
                     question: "IP个人风格与商业转化存在冲突，你会：",
                     options: [
                         { id: "A", text: "坚持商业转化效果优先" },
@@ -194,6 +210,7 @@ const examData = {
                 },
                 {
                     id: 17,
+                    section: "内容创作与制作",
                     question: "发现竞对在模仿你的内容风格，你会：",
                     options: [
                         { id: "A", text: "通过法律途径维护权益" },
@@ -205,6 +222,7 @@ const examData = {
                 },
                 {
                     id: 18,
+                    section: "内容创作与制作",
                     question: "多场景多道具复杂视频制作，最大挑战是：",
                     options: [
                         { id: "A", text: "专业设备协调配置问题" },
@@ -222,6 +240,7 @@ const examData = {
             questions: [
                 {
                     id: 19,
+                    section: "数据分析与转化优化",
                     question: "公域引流到私域，转化率达到多少算正常水平：",
                     options: [
                         { id: "A", text: "转化率达到30-40%属正常" },
@@ -233,6 +252,7 @@ const examData = {
                 },
                 {
                     id: 20,
+                    section: "数据分析与转化优化",
                     question: "私域用户的正常成交转化率范围是：",
                     options: [
                         { id: "A", text: "私域成交率1-2%属正常" },
@@ -244,6 +264,7 @@ const examData = {
                 },
                 {
                     id: 21,
+                    section: "数据分析与转化优化",
                     question: "公转私转化率仅有20%，最需要优化的是：",
                     options: [
                         { id: "A", text: "增加公域内容发布频次" },
@@ -255,6 +276,7 @@ const examData = {
                 },
                 {
                     id: 22,
+                    section: "数据分析与转化优化",
                     question: "私域成交率只有1%，最应该检查的是：",
                     options: [
                         { id: "A", text: "私域用户质量和匹配度" },
@@ -266,6 +288,7 @@ const examData = {
                 },
                 {
                     id: 23,
+                    section: "数据分析与转化优化",
                     question: "视频播放量很高但转化率极低，最需要分析：",
                     options: [
                         { id: "A", text: "播放完成率和评论情感" },
@@ -277,6 +300,7 @@ const examData = {
                 },
                 {
                     id: 24,
+                    section: "数据分析与转化优化",
                     question: "投放1万元获得1000个私域用户，成交50单，客单价200元，ROI是：",
                     options: [
                         { id: "A", text: "ROI为1.0，需要优化投放" },
@@ -288,6 +312,7 @@ const examData = {
                 },
                 {
                     id: 25,
+                    section: "数据分析与转化优化",
                     question: "监控账号健康度，最重要的指标组合是：",
                     options: [
                         { id: "A", text: "播放量、点赞数、评论数" },
@@ -299,6 +324,7 @@ const examData = {
                 },
                 {
                     id: 26,
+                    section: "数据分析与转化优化",
                     question: "发现某环节转化率突然下降50%，优先分析：",
                     options: [
                         { id: "A", text: "该环节前后数据变化趋势" },
@@ -316,6 +342,7 @@ const examData = {
             questions: [
                 {
                     id: 27,
+                    section: "选品与商业化",
                     question: "懒人经济趋势下，最符合爆品潜质的是：",
                     options: [
                         { id: "A", text: "高端智能扫地机器人3000+" },
@@ -327,6 +354,7 @@ const examData = {
                 },
                 {
                     id: 28,
+                    section: "选品与商业化",
                     question: "30万粉丝母婴博主，某产品数据好但利润微薄：",
                     options: [
                         { id: "A", text: "放弃产品寻找高利润替代" },
@@ -338,6 +366,7 @@ const examData = {
                 },
                 {
                     id: 29,
+                    section: "选品与商业化",
                     question: "设计升单路径时，最容易忽视的环节是：",
                     options: [
                         { id: "A", text: "产品价格梯度合理设计" },
@@ -349,6 +378,7 @@ const examData = {
                 },
                 {
                     id: 30,
+                    section: "选品与商业化",
                     question: "某类产品季节性强但利润高，你会：",
                     options: [
                         { id: "A", text: "只在销售旺季进行推广" },
@@ -360,6 +390,7 @@ const examData = {
                 },
                 {
                     id: 31,
+                    section: "选品与商业化",
                     question: "健身IP想扩展美食领域，你的建议是：",
                     options: [
                         { id: "A", text: "直接开始美食内容制作" },
@@ -371,6 +402,7 @@ const examData = {
                 },
                 {
                     id: 32,
+                    section: "选品与商业化",
                     question: "新品定价，竞品价格区间99-999元，你会：",
                     options: [
                         { id: "A", text: "选择中间价位相对安全" },
@@ -382,6 +414,7 @@ const examData = {
                 },
                 {
                     id: 33,
+                    section: "选品与商业化",
                     question: "行业负面事件影响品类市场信心，你会：",
                     options: [
                         { id: "A", text: "立即停止相关产品推广" },
@@ -393,6 +426,7 @@ const examData = {
                 },
                 {
                     id: 34,
+                    section: "选品与商业化",
                     question: "品牌方产品与IP调性不符但坑位费很高：",
                     options: [
                         { id: "A", text: "接受合作调整内容包装" },
@@ -410,6 +444,7 @@ const examData = {
             questions: [
                 {
                     id: 35,
+                    section: "团队管理与项目运营",
                     question: "IP连续高强度工作出现倦怠影响质量：",
                     options: [
                         { id: "A", text: "给IP安排充足假期休息" },
@@ -421,6 +456,7 @@ const examData = {
                 },
                 {
                     id: 36,
+                    section: "团队管理与项目运营",
                     question: "流量操盘手和运营在内容方向产生分歧：",
                     options: [
                         { id: "A", text: "以客观数据作为判断标准" },
@@ -432,6 +468,7 @@ const examData = {
                 },
                 {
                     id: 37,
+                    section: "团队管理与项目运营",
                     question: "培训后理论掌握好但实操效果差，你会：",
                     options: [
                         { id: "A", text: "增加理论培训时间投入" },
@@ -443,6 +480,7 @@ const examData = {
                 },
                 {
                     id: 38,
+                    section: "团队管理与项目运营",
                     question: "核心团队成员突然离职，客户要求不影响交付：",
                     options: [
                         { id: "A", text: "立即招聘合适替代人员" },
@@ -454,6 +492,7 @@ const examData = {
                 },
                 {
                     id: 39,
+                    section: "团队管理与项目运营",
                     question: "客户对交付结果不满威胁终止合作，你会：",
                     options: [
                         { id: "A", text: "立即道歉承诺全面改进" },
@@ -465,6 +504,7 @@ const examData = {
                 },
                 {
                     id: 40,
+                    section: "团队管理与项目运营",
                     question: "客户预算有限但需求很高，你会：",
                     options: [
                         { id: "A", text: "直接拒绝合作避免风险" },
@@ -501,4 +541,13 @@ const examData = {
             description: "具备顶级的战略思维和项目管理能力，能够统筹复杂项目，处理高难度的商务谈判和团队管理，具有前瞻性的市场判断力"
         }
     ]
-}; 
+};
+
+// 导出数据，兼容不同环境
+if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
+    module.exports = examData;
+} else {
+    window.examData = examData;
+    // 直接将处理后的 questions 数组赋给 window.questions
+    window.questions = examData.sections.reduce((acc, section) => acc.concat(section.questions), []);
+} 
