@@ -3,6 +3,7 @@ let currentQuestion = 0;
 let userAnswers = [];
 let examStarted = false;
 let examFinished = false;
+let justSwitchedQuestion = false; // 新增标记，用于跟踪是否刚刚切换了问题
 
 // DOM元素
 let startExamBtn, examContainer, questionContainer, prevBtn, nextBtn, submitBtn, resultContainer, progressBar, questionCounter, introSection;
@@ -85,6 +86,7 @@ function startExam() {
         if (introSection) introSection.classList.add('hidden');
         if (examContainer) examContainer.classList.remove('hidden');
         currentQuestion = 0;
+        justSwitchedQuestion = true; // 标记刚刚切换了问题
         displayQuestion(currentQuestion);
         updateProgressBar();
         updateQuestionCounter();
@@ -161,6 +163,11 @@ function displayQuestion(index) {
         
         // 更新按钮状态
         updateButtonState();
+        
+        // 设置一个短暂的延时，标记问题已经完全切换
+        setTimeout(() => {
+            justSwitchedQuestion = false;
+        }, 100);
     } catch (error) {
         console.error('显示问题失败:', error);
     }
@@ -222,6 +229,7 @@ function goToPreviousQuestion() {
     try {
         if (currentQuestion > 0) {
             currentQuestion--;
+            justSwitchedQuestion = true; // 标记刚刚切换了问题
             displayQuestion(currentQuestion);
             updateProgressBar();
             updateQuestionCounter();
@@ -236,14 +244,15 @@ function goToNextQuestion() {
     console.log('尝试前往下一题');
     
     try {
-        // 检查当前问题是否已回答
-        if (userAnswers[currentQuestion] === null) {
+        // 检查当前问题是否已回答，但如果刚刚切换到这个问题则不检查
+        if (userAnswers[currentQuestion] === null && !justSwitchedQuestion) {
             showMessage('请先回答当前问题再继续！', true);
             return;
         }
         
         if (currentQuestion < userAnswers.length - 1) {
             currentQuestion++;
+            justSwitchedQuestion = true; // 标记刚刚切换了问题
             displayQuestion(currentQuestion);
             updateProgressBar();
             updateQuestionCounter();
