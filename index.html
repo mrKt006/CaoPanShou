@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>操盘手能力评估考试</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- 防止缓存问题 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>操盘手能力评估考试</h1>
+            <p class="description">本考试共40题，每题2.5分，满分100分。请根据实际情况选择最符合的答案。</p>
+        </header>
+
+        <div class="main-content">
+            <div class="intro-section">
+                <h2>考试说明</h2>
+                <p>本考试旨在评估您作为内容操盘手的专业能力，包含五个部分：</p>
+                <ul>
+                    <li>平台认知与规则理解（8题，20分）</li>
+                    <li>内容创作与制作（10题，25分）</li>
+                    <li>数据分析与转化优化（8题，20分）</li>
+                    <li>选品与商业化（8题，20分）</li>
+                    <li>团队管理与项目运营（6题，15分）</li>
+                </ul>
+                <div class="start-btn-container">
+                    <button id="start-exam" class="btn">开始考试</button>
+                </div>
+            </div>
+
+            <div id="exam-container" class="exam-section hidden">
+                <!-- 考试内容将通过JavaScript动态加载 -->
+                <div id="progress-bar-container">
+                    <div id="progress-bar"></div>
+                </div>
+                <div id="question-container"></div>
+                <div class="exam-controls">
+                    <button id="prev-btn" class="btn">上一题</button>
+                    <span id="question-counter">1/40</span>
+                    <button id="next-btn" class="btn">下一题</button>
+                </div>
+                <button id="submit-exam" class="btn submit-btn hidden">提交答案</button>
+            </div>
+
+            <div id="result-container" class="result-section hidden">
+                <!-- 考试结果将通过JavaScript动态显示 -->
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2023 操盘手能力评估系统 | 版权所有</p>
+        </footer>
+    </div>
+
+    <script src="questions.js"></script>
+    <script src="app.js"></script>
+</body>
+</html> 
